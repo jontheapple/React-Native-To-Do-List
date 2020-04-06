@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View, ScrollView } from 'react-native';
 
 var today = new Date();
 
@@ -72,7 +72,9 @@ function FormattedDate() {
 	return (
 		<Text 
 			style={{
-				fontSize: 20
+				fontSize: 40,
+				fontWeight: "bold",
+				color: "#646266"
 			}}
 		>
 			{dayString}, {today.getDate()} {monthString}
@@ -80,21 +82,15 @@ function FormattedDate() {
 	);
 }
 
-function Cat(props) {
-  return (
-    <View>
-      <Text>Hello, I am {props.name}</Text>
-    </View>
-  );
-}
-
 
 
 
 export default function App() {
 	return(
-		<View>
-			<FormattedDate />
-		</View>
-	)
+		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
+			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
+				<FormattedDate />
+			</View>
+		</ScrollView>
+	);
 }
