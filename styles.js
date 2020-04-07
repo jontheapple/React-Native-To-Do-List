@@ -34,8 +34,6 @@ var styles = StyleSheet.create({
 	button:{
 		borderWidth: 1,
 		borderColor: 'black',
-		alignItems: 'center',
-		justifyContent: 'center',
 		width: 20,
 		height: 20,
 		backgroundColor: 'white',
@@ -45,16 +43,15 @@ var styles = StyleSheet.create({
 	buttonDone:{
 		borderWidth: 1,
 		borderColor: 'white',
-		alignItems: 'center',
-		justifyContent: 'center',
 		width: 20,
 		height: 20,
 		backgroundColor: 'white',
 		borderRadius: 10,
 		alignSelf: "center"
 	},
-	addTask:{
-		
+	topBar:{
+		flexDirection: "row",
+		justifyContent: "space-between"
 	}
 });
 

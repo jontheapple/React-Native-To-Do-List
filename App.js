@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import styles from './styles.js';
 
 var today = new Date();
@@ -199,9 +199,12 @@ export default function App() {
 	return(
 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
-				<Text style={styles.dateDisplay}>
-					{formattedDate()}
-				</Text>
+				<View style={styles.topBar}>
+					<Text style={styles.dateDisplay}>
+						{formattedDate()}
+					</Text>
+					<TouchableOpacity><Image style={{height: 80, width: 80}} source={require("./AddButton.png")}></Image></TouchableOpacity>
+				</View>
 				{
 					tasks.map((currentTask, i) => {
 						return(
