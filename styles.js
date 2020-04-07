@@ -52,6 +52,9 @@ var styles = StyleSheet.create({
 		backgroundColor: 'white',
 		borderRadius: 10,
 		alignSelf: "center"
+	},
+	addTask:{
+		
 	}
 });
 
