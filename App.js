@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, TextInput, View, ScrollView } from 'react-native';
+import styles from './styles.js';
 
 var today = new Date();
 const tasks = [
@@ -88,11 +89,7 @@ function FormattedDate() {
 
 	return (
 		<Text 
-			style={{
-				fontSize: 40,
-				fontWeight: "bold",
-				color: "#646266"
-			}}
+			style={styles.timeAndDay}
 		>
 			{dayString}, {today.getDate()} {monthString}
 		</Text>
@@ -111,7 +108,6 @@ class ListItem extends React.Component {
 	}
 
 	render(){
-		console.log("state is " + this.state.pressed);
 		if (this.state.pressed){
 			return (
 				<Text
@@ -120,7 +116,7 @@ class ListItem extends React.Component {
 							return {pressed: false}
 						});
 					}}
-					style={{color: "#646266", fontSize: 30, textDecorationLine: "line-through"}}>
+					style={styles.itemDone}>
 					{this.state.text}
 				</Text>
 			);
@@ -132,7 +128,7 @@ class ListItem extends React.Component {
 							return {pressed: true}
 						});
 					}}
-					style={{color: "#646266", fontSize: 30}}>
+					style={styles.item}>
 					{this.state.text}
 				</Text>
 			);
@@ -140,10 +136,7 @@ class ListItem extends React.Component {
 	}
 }
 
-
-
-
-export default function App() {
+function sortTasks(){
 	//Sort tasks in order of which one needs to be completed first
 	tasks.sort((firstE, secondE) => {
 		if (firstE.hour > secondE.hour){
@@ -158,6 +151,12 @@ export default function App() {
 			} else return 0;
 		}
 	});
+}
+
+
+
+
+export default function App() {
 	return(
 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
