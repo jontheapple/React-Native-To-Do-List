@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, ScrollView } from 'react-native';
+import { Text, TextInput, View, ScrollView, TouchableOpacity } from 'react-native';
 import styles from './styles.js';
 
 var today = new Date();
@@ -107,55 +107,56 @@ class ListItem extends React.Component {
 		}
 	}
 
+	swapState(){
+		this.setState({pressed: !this.state.pressed});
+		return;
+	}
+
 	render(){
 		if (this.state.pressed){
 			return (
-				<View
-					style={styles.list}
-					>
-					<Text
-						onPress={() => {
-							this.setState(() => {
-								return {pressed: false}
-							});
-						}}
-						style={styles.itemDone}>
-						{this.state.task}
-					</Text>
-					<Text
-						onPress={() => {
-							this.setState(() => {
-								return {pressed: false}
-							});
-						}}
-						style={styles.itemTimeDone}>
-						{toDigitalTime(this.state.hour, this.state.minute)}
-					</Text>
+				<View style={{
+						flexDirection: "row",
+						marginBottom: 10
+					}}>
+					<TouchableOpacity style={styles.buttonDone} onPress={() => this.swapState()}/>
+					<View
+						style={styles.list}
+						>
+						<Text
+							onPress={() => this.swapState()}
+							style={styles.itemTextDone}>
+							{this.state.task}
+						</Text>
+						<Text
+							onPress={() => this.swapState()}
+							style={styles.itemTimeDone}>
+							{toDigitalTime(this.state.hour, this.state.minute)}
+						</Text>
+					</View>
 				</View>
 			);
 		} else{
 			return (
-				<View
-					style={styles.list}
-					>
-					<Text
-						onPress={() => {
-							this.setState(() => {
-								return {pressed: true}
-							});
-						}}
-						style={styles.item}>
-						{this.state.task}
-					</Text>
-					<Text
-						onPress={() => {
-							this.setState(() => {
-								return {pressed: true}
-							});
-						}}
-						style={styles.itemTime}>
-						{toDigitalTime(this.state.hour, this.state.minute)}
-					</Text>
+				<View style={{
+						flexDirection: "row",
+						marginBottom: 10
+					}}>
+					<TouchableOpacity style={styles.button} onPress={() => this.swapState()}/>
+					<View
+						style={styles.list}
+						>
+						<Text
+							onPress={() => this.swapState()}
+							style={styles.itemText}>
+							{this.state.task}
+						</Text>
+						<Text
+							onPress={() => this.swapState()}
+							style={styles.itemTime}>
+							{toDigitalTime(this.state.hour, this.state.minute)}
+						</Text>
+					</View>
 				</View>
 			);
 		}

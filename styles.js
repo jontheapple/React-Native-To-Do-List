@@ -6,13 +6,13 @@ var styles = StyleSheet.create({
 		fontWeight: "bold",
 		color: "#646266"
 	},
-	item:{
+	itemText:{
 		color: "#646266",
-		fontSize: 30
+		fontSize: 25
 	},
-	itemDone:{
+	itemTextDone:{
 		color: "#d9d8da",
-		fontSize: 30,
+		fontSize: 25,
 		textDecorationLine: "line-through",
 	},
 	itemTime:{
@@ -30,6 +30,28 @@ var styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: "row",
 		justifyContent: "space-between"
+	},
+	button:{
+		borderWidth: 1,
+		borderColor: 'black',
+		alignItems: 'center',
+		justifyContent: 'center',
+		width: 20,
+		height: 20,
+		backgroundColor: 'white',
+		borderRadius: 10,
+		alignSelf: "center"
+	},
+	buttonDone:{
+		borderWidth: 1,
+		borderColor: 'white',
+		alignItems: 'center',
+		justifyContent: 'center',
+		width: 20,
+		height: 20,
+		backgroundColor: 'white',
+		borderRadius: 10,
+		alignSelf: "center"
 	}
 });
 
