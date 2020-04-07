@@ -3,6 +3,7 @@ import { Text, TextInput, View, ScrollView, TouchableOpacity } from 'react-nativ
 import styles from './styles.js';
 
 var today = new Date();
+
 const tasks = [
 	{
 		task: 'Throttle flowers',
@@ -21,6 +22,7 @@ const tasks = [
 	}
 ]
 
+//Takes the current date and puts it in a string format to be displayed at top of app
 function formattedDate() {
 	var dayString;
 	var monthString;
@@ -90,6 +92,7 @@ function formattedDate() {
 	return dayString + ", " + today.getDate() + " " + monthString;
 }
 
+//React Component for an individual item on the Todo list
 class ListItem extends React.Component {
 	constructor(props){
 		super(props);
@@ -101,12 +104,14 @@ class ListItem extends React.Component {
 		}
 	}
 
+	//This function is called whenever the item is tapped
 	swapState(){
 		this.setState({pressed: !this.state.pressed});
 		return;
 	}
 
 	render(){
+		//Slightly different behavior depending on if the item is "crossed out"
 		if (this.state.pressed){
 			return (
 				<View style={{
@@ -157,8 +162,8 @@ class ListItem extends React.Component {
 	}
 }
 
+//Sort tasks in order of which one needs to be completed first
 function sortTasks(){
-	//Sort tasks in order of which one needs to be completed first
 	tasks.sort((firstE, secondE) => {
 		if (firstE.hour > secondE.hour){
 			return 1;
@@ -174,6 +179,7 @@ function sortTasks(){
 	});
 }
 
+//This function takes an hour (0-23) and a minute (0-59), and returns a string in XX:XX format, ending with "am" or "pm"
 function toDigitalTime(hour, minute){
 	var meri = "";
 	var extraZero = "";
@@ -187,9 +193,6 @@ function toDigitalTime(hour, minute){
 	if (minute < 10) extraZero = "0"
 	return (hour + ":" + extraZero + minute + meri);
 }
-
-
-
 
 export default function App() {
 	sortTasks();
