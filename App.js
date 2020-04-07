@@ -1,5 +1,9 @@
+import 'react-native-gesture-handler';
 import React from 'react';
-import { Text, TextInput, View, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { Text, TextInput, View, ScrollView, TouchableOpacity, Image, Button } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack';
+
 import styles from './styles.js';
 
 var today = new Date();
@@ -194,7 +198,7 @@ function toDigitalTime(hour, minute){
 	return (hour + ":" + extraZero + minute + meri);
 }
 
-export default function App() {
+function HomeScreen({navigation}) {
 	sortTasks();
 	return(
 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
@@ -203,7 +207,9 @@ export default function App() {
 					<Text style={styles.dateDisplay}>
 						{formattedDate()}
 					</Text>
-					<TouchableOpacity><Image style={{height: 80, width: 80}} source={require("./AddButton.png")}></Image></TouchableOpacity>
+					<TouchableOpacity onPress={() => navigation.navigate("Add")}>
+						<Image style={{height: 80, width: 80}} source={require("./AddButton.png")}></Image>
+					</TouchableOpacity>
 				</View>
 				{
 					tasks.map((currentTask, i) => {
@@ -216,3 +222,44 @@ export default function App() {
 		</ScrollView>
 	);
 }
+
+function AddTaskScreen({navigation}) {
+	return (
+		// <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+		// 	<Text>Details Screen</Text>
+		// 	<Button
+		// 		title="Go to Details...again..."
+		// 		onPress={() => navigation.push('Details')}
+		// 	/>
+		// 	<Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
+		// 	<Button title="Go back" onPress={() => navigation.goBack()} />
+		// 	<Button title="Go to first screen of stack" onPress={() => navigation.popToTop()} />
+		// </View>
+		<View style={{flex: 1, backgroundColor: "#5f75e2"}}>
+			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
+				<Text style={styles.dateDisplay}>
+					Add a new task:
+				</Text>
+			</View>
+		</View>
+	);
+}
+
+const Stack = createStackNavigator();
+
+function TestApp() {
+	return (
+		<NavigationContainer>
+			<Stack.Navigator initialRouteName="Home">
+				<Stack.Screen
+					name="Home"
+					component={HomeScreen}
+					options={{title: "To-Do List"}}
+				/>
+				<Stack.Screen name="Add" component={AddTaskScreen} />
+			</Stack.Navigator>
+		</NavigationContainer>
+	);
+}
+
+export default TestApp;
