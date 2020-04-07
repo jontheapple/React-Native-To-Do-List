@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 var styles = StyleSheet.create({
-	timeAndDay:{
+	dateDisplay:{
 		fontSize: 40,
 		fontWeight: "bold",
 		color: "#646266"

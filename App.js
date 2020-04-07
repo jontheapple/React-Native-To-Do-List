@@ -21,7 +21,7 @@ const tasks = [
 	}
 ]
 
-function FormattedDate() {
+function formattedDate() {
 	var dayString;
 	var monthString;
 	switch (today.getDay()){
@@ -87,13 +87,7 @@ function FormattedDate() {
 			break;
 	}
 
-	return (
-		<Text 
-			style={styles.timeAndDay}
-		>
-			{dayString}, {today.getDate()} {monthString}
-		</Text>
-	);
+	return dayString + ", " + today.getDate() + " " + monthString;
 }
 
 class ListItem extends React.Component {
@@ -202,7 +196,9 @@ export default function App() {
 	return(
 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
-				<FormattedDate />
+				<Text style={styles.dateDisplay}>
+					{formattedDate()}
+				</Text>
 				{
 					tasks.map((currentTask, i) => {
 						return(
