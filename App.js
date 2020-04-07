@@ -110,27 +110,53 @@ class ListItem extends React.Component {
 	render(){
 		if (this.state.pressed){
 			return (
-				<Text
-					onPress={() => {
-						this.setState(() => {
-							return {pressed: false}
-						});
-					}}
-					style={styles.itemDone}>
-					{this.state.text}
-				</Text>
+				<View
+					style={styles.list}
+					>
+					<Text
+						onPress={() => {
+							this.setState(() => {
+								return {pressed: false}
+							});
+						}}
+						style={styles.itemDone}>
+						{this.state.text}
+					</Text>
+					<Text
+						onPress={() => {
+							this.setState(() => {
+								return {pressed: false}
+							});
+						}}
+						style={styles.itemTimeDone}>
+						{toDigitalTime(this.state.hour, this.state.minute)}
+					</Text>
+				</View>
 			);
 		} else{
 			return (
-				<Text
-					onPress={() => {
-						this.setState(() => {
-							return {pressed: true}
-						});
-					}}
-					style={styles.item}>
-					{this.state.text}
-				</Text>
+				<View
+					style={styles.list}
+					>
+					<Text
+						onPress={() => {
+							this.setState(() => {
+								return {pressed: true}
+							});
+						}}
+						style={styles.item}>
+						{this.state.text}
+					</Text>
+					<Text
+						onPress={() => {
+							this.setState(() => {
+								return {pressed: true}
+							});
+						}}
+						style={styles.itemTime}>
+						{toDigitalTime(this.state.hour, this.state.minute)}
+					</Text>
+				</View>
 			);
 		}
 	}
@@ -153,6 +179,18 @@ function sortTasks(){
 	});
 }
 
+function toDigitalTime(hour, minute){
+	var meri = "";
+	if (hour >= 12){
+		hour -= 12;
+		meri = "pm"
+	} else{
+		meri = "am"
+	}
+	if (hour === 0) hour = 12;
+	return (hour + ":" + minute + meri);
+}
+
 
 
 
@@ -161,7 +199,7 @@ export default function App() {
 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
 				<FormattedDate />
-				<ListItem task={"Do Dishes"} hour={3} minute={55} />
+				<ListItem task={"Do"} hour={12} minute={55} />
 			</View>
 		</ScrollView>
 	);
