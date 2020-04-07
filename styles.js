@@ -1,6 +1,6 @@
-import { RecyclerViewBackedScrollViewComponent } from "react-native";
+import { StyleSheet } from "react-native";
 
-var styles = {
+var styles = StyleSheet.create({
 	timeAndDay:{
 		fontSize: 40,
 		fontWeight: "bold",
@@ -31,6 +31,6 @@ var styles = {
 		flexDirection: "row",
 		justifyContent: "space-between"
 	}
-};
+});
 
 export default styles;
