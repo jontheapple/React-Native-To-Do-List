@@ -2,6 +2,23 @@ import React from 'react';
 import { Text, TextInput, View, ScrollView } from 'react-native';
 
 var today = new Date();
+const tasks = [
+	{
+		task: 'Throttle flowers',
+		hour: 8,
+		minute: 0
+	},
+	{
+		task: 'Do dishes',
+		hour: 19,
+		minute: 30
+	},
+	{
+		task: "Attack computer",
+		hour: 14,
+		minute: 45
+	}
+]
 
 function FormattedDate() {
 	var dayString;
@@ -82,14 +99,70 @@ function FormattedDate() {
 	);
 }
 
+class ListItem extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			pressed: false,
+			text: this.props.task,
+			hour: this.props.hour,
+			minute: this.props.minute
+		}
+	}
+
+	render(){
+		console.log("state is " + this.state.pressed);
+		if (this.state.pressed){
+			return (
+				<Text
+					onPress={() => {
+						this.setState(() => {
+							return {pressed: false}
+						});
+					}}
+					style={{color: "#646266", fontSize: 30, textDecorationLine: "line-through"}}>
+					{this.state.text}
+				</Text>
+			);
+		} else{
+			return (
+				<Text
+					onPress={() => {
+						this.setState(() => {
+							return {pressed: true}
+						});
+					}}
+					style={{color: "#646266", fontSize: 30}}>
+					{this.state.text}
+				</Text>
+			);
+		}
+	}
+}
+
 
 
 
 export default function App() {
+	//Sort tasks in order of which one needs to be completed first
+	tasks.sort((firstE, secondE) => {
+		if (firstE.hour > secondE.hour){
+			return 1;
+		} else if (secondE.hour > firstE.hour){
+			return -1;
+		} else{
+			if (firstE.minute > secondE.minute){
+				return 1;
+			} else if (secondE.minute > firstE.minute){
+				return -1;
+			} else return 0;
+		}
+	});
 	return(
 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
 				<FormattedDate />
+				<ListItem task={"Do Dishes"} hour={3} minute={55} />
 			</View>
 		</ScrollView>
 	);
