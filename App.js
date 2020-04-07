@@ -101,9 +101,9 @@ class ListItem extends React.Component {
 		super(props);
 		this.state = {
 			pressed: false,
-			text: this.props.task,
-			hour: this.props.hour,
-			minute: this.props.minute
+			task: this.props.task.task,
+			hour: this.props.task.hour,
+			minute: this.props.task.minute
 		}
 	}
 
@@ -120,7 +120,7 @@ class ListItem extends React.Component {
 							});
 						}}
 						style={styles.itemDone}>
-						{this.state.text}
+						{this.state.task}
 					</Text>
 					<Text
 						onPress={() => {
@@ -145,7 +145,7 @@ class ListItem extends React.Component {
 							});
 						}}
 						style={styles.item}>
-						{this.state.text}
+						{this.state.task}
 					</Text>
 					<Text
 						onPress={() => {
@@ -181,6 +181,7 @@ function sortTasks(){
 
 function toDigitalTime(hour, minute){
 	var meri = "";
+	var extraZero = "";
 	if (hour >= 12){
 		hour -= 12;
 		meri = "pm"
@@ -188,18 +189,26 @@ function toDigitalTime(hour, minute){
 		meri = "am"
 	}
 	if (hour === 0) hour = 12;
-	return (hour + ":" + minute + meri);
+	if (minute < 10) extraZero = "0"
+	return (hour + ":" + extraZero + minute + meri);
 }
 
 
 
 
 export default function App() {
+	sortTasks();
 	return(
 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
 				<FormattedDate />
-				<ListItem task={"Do"} hour={12} minute={55} />
+				{
+					tasks.map((currentTask, i) => {
+						return(
+							<ListItem task={currentTask}/>
+						);
+					})
+				}
 			</View>
 		</ScrollView>
 	);
