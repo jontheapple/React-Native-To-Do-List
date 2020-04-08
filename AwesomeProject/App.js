@@ -26,6 +26,15 @@ var tasks = [
 	}
 ]
 
+fetch("10.0.2.2:3000")
+	.then((response) => response.json())
+	.then((json) => console.log(json))
+	.catch((error) => {
+		console.log(error);
+	});
+
+
+
 var taskList = [];
 
 //Takes the current date and puts it in a string format to be displayed at top of app
