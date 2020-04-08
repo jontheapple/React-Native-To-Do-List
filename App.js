@@ -8,7 +8,7 @@ import styles from './styles.js';
 
 var today = new Date();
 
-const tasks = [
+var tasks = [
 	{
 		task: 'Throttle flowers',
 		hour: 8,
@@ -25,6 +25,8 @@ const tasks = [
 		minute: 45
 	}
 ]
+
+var taskList = [];
 
 //Takes the current date and puts it in a string format to be displayed at top of app
 function formattedDate() {
@@ -106,6 +108,18 @@ class ListItem extends React.Component {
 			hour: this.props.task.hour,
 			minute: this.props.task.minute
 		}
+	}
+
+	updateStuff(task){
+		this.setState({
+			task: task.task,
+			hour: task.hour,
+			minute: task.minute
+		});
+	}
+
+	doForceUpdate(){
+		this.forceUpdate();
 	}
 
 	//This function is called whenever the item is tapped
@@ -198,8 +212,22 @@ function toDigitalTime(hour, minute){
 	return (hour + ":" + extraZero + minute + meri);
 }
 
-function HomeScreen({navigation}) {
+function addTask(task, hour, minute){
+	var newTask = {
+		task: task,
+		hour: hour,
+		minute: minute
+	}
+	tasks.push(newTask);
 	sortTasks();
+	for (var i = 0; i < taskList.length; i++){
+		taskList[i]
+	}
+	return tasks;
+}
+
+function HomeScreen({navigation}) {
+	const [value, setValue] = React.useState(0);
 	return(
 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
@@ -207,15 +235,22 @@ function HomeScreen({navigation}) {
 					<Text style={styles.dateDisplay}>
 						{formattedDate()}
 					</Text>
-					<TouchableOpacity onPress={() => navigation.navigate("Add")}>
+					<TouchableOpacity onPress={() => {
+							addTask("hi", 12, 0);
+							setValue(value + 1);
+						}}>
 						<Image style={{height: 80, width: 80}} source={require("./AddButton.png")}></Image>
 					</TouchableOpacity>
 				</View>
 				{
 					tasks.map((currentTask, i) => {
-						return(
-							<ListItem task={currentTask}/>
-						);
+						// if (taskList.length <= i){
+						// 	taskList[i] = new ListItem();
+						// 	return ()
+						// } else {
+						// 	taskList[i].updateStuff(currentTask);
+						// }
+						return(<ListItem task={currentTask}/>);
 					})
 				}
 			</View>
@@ -224,6 +259,7 @@ function HomeScreen({navigation}) {
 }
 
 function AddTaskScreen({navigation}) {
+	const [text, setText] = React.useState("");
 	return (
 		// <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
 		// 	<Text>Details Screen</Text>
@@ -240,6 +276,11 @@ function AddTaskScreen({navigation}) {
 				<Text style={styles.dateDisplay}>
 					Add a new task:
 				</Text>
+				<TextInput
+					style={{height: 40, backgroundColor: "#d9d8da"}}
+					placeholder="Enter task here"
+					onChangeText={text => setText(text)}
+				/>
 			</View>
 		</View>
 	);
