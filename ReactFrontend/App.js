@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Text, TextInput, View, ScrollView, TouchableOpacity, Image, Button } from 'react-native';
+import { Text, TextInput, View, ScrollView, TouchableOpacity, Image, Picker } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -98,15 +98,12 @@ function formattedDate() {
 
 //React Component for an individual item on the Todo list
 class ListItem extends React.Component {
-	// constructor(props){
-	// 	super(props);
-	// 	this.state = {
-	// 		pressed: false,
-	// 		task: this.props.task.task,
-	// 		hour: this.props.task.hour,
-	// 		minute: this.props.task.minute
-	// 	}
-	// }
+	constructor(props){
+		super(props);
+		this.state = {
+			pressed: false
+		}
+	}
 
 	// updateStuff(task){
 	// 	this.setState({
@@ -117,30 +114,31 @@ class ListItem extends React.Component {
 	// }
 
 	//This function is called whenever the item is tapped
-	// swapState(){
-	// 	this.setState({pressed: !this.state.pressed});
-	// 	return;
-	// }
+	swapState(){
+		this.setState((state) => {
+			return {pressed: !state.pressed}
+		});
+	}
 
 	render(){
 		//Slightly different behavior depending on if the item is "crossed out"
-		if (this.props.pressed){
+		if (this.state.pressed){
 			return (
 				<View style={{
 						flexDirection: "row",
 						marginBottom: 10
 					}}>
-					<TouchableOpacity style={styles.buttonDone} onPress={() => console.log("pressed")}/>
+					<TouchableOpacity style={styles.buttonDone} onPress={() => this.swapState()}/>
 					<View
 						style={styles.list}
 						>
 						<Text
-							onPress={() => console.log("pressed")}
+							onPress={() => this.swapState()}
 							style={styles.itemTextDone}>
 							{this.props.task}
 						</Text>
 						<Text
-							onPress={() => console.log("pressed")}
+							onPress={() => this.swapState()}
 							style={styles.itemTimeDone}>
 							{toDigitalTime(this.props.hour, this.props.minute)}
 						</Text>
@@ -153,17 +151,17 @@ class ListItem extends React.Component {
 						flexDirection: "row",
 						marginBottom: 10
 					}}>
-					<TouchableOpacity style={styles.button} onPress={() => console.log("pressed")}/>
+					<TouchableOpacity style={styles.button} onPress={() => this.swapState()}/>
 					<View
 						style={styles.list}
 						>
 						<Text
-							onPress={() => console.log("pressed")}
+							onPress={() => this.swapState()}
 							style={styles.itemText}>
 							{this.props.task}
 						</Text>
 						<Text
-							onPress={() => console.log("pressed")}
+							onPress={() => this.swapState()}
 							style={styles.itemTime}>
 							{toDigitalTime(this.props.hour, this.props.minute)}
 						</Text>
@@ -218,7 +216,7 @@ function addTask(task, hour, minute){
 }
 
 function HomeScreen({navigation}) {
-	const [value, setValue] = React.useState(0);
+	const [items, setItems] = React.useState(tasks.length);
 	return(
 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
@@ -227,8 +225,8 @@ function HomeScreen({navigation}) {
 						{formattedDate()}
 					</Text>
 					<TouchableOpacity onPress={() => {
-							addTask("hi", 12, 0);
-							setValue(value + 1);
+							navigation.navigate("Add");
+							setItems(items + 1);
 						}}>
 						<Image style={{height: 80, width: 80}} source={require("./AddButton.png")}></Image>
 					</TouchableOpacity>
@@ -244,7 +242,10 @@ function HomeScreen({navigation}) {
 }
 
 function AddTaskScreen({navigation}) {
-	const [text, setText] = React.useState("");
+	const [text, setText] = React.useState();
+	const [hour, setHour] = React.useState(0);
+	const [minute, setMinute] = React.useState(0);
+	const [meri, setMeri] = React.useState("am");
 	return (
 		// <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
 		// 	<Text>Details Screen</Text>
@@ -266,6 +267,50 @@ function AddTaskScreen({navigation}) {
 					placeholder="Enter task here"
 					onChangeText={text => setText(text)}
 				/>
+				<Text style={styles.dateDisplay}>
+					Time to complete task:
+				</Text>
+				<Picker
+					selectedValue={hour}
+					onValueChange={(itemValue, itemIndex) => setHour(itemValue)}
+					>
+						<Picker.Item label="12" value={0} />
+						<Picker.Item label="1" value={1} />
+						<Picker.Item label="2" value={2} />
+						<Picker.Item label="3" value={3} />
+						<Picker.Item label="4" value={4} />
+						<Picker.Item label="5" value={5} />
+						<Picker.Item label="6" value={6} />
+						<Picker.Item label="7" value={7} />
+						<Picker.Item label="8" value={8} />
+						<Picker.Item label="9" value={9} />
+						<Picker.Item label="10" value={10}/>
+						<Picker.Item label="11" value={11} />
+				</Picker>
+				<Picker
+					selectedValue={minute}
+					onValueChange={(itemValue, itemIndex) => setMinute(itemValue)}
+					>
+						<Picker.Item label=":00" value={0} />
+						<Picker.Item label=":05" value={5} />
+						<Picker.Item label=":10" value={10} />
+						<Picker.Item label=":15" value={15} />
+						<Picker.Item label=":20" value={20} />
+						<Picker.Item label=":25" value={25} />
+						<Picker.Item label=":30" value={30} />
+						<Picker.Item label=":35" value={35} />
+						<Picker.Item label=":40" value={40} />
+						<Picker.Item label=":45" value={45} />
+						<Picker.Item label=":50" value={50} />
+						<Picker.Item label=":55" value={55} />
+				</Picker>
+				<Picker
+					selectedValue={meri}
+					onValueChange={(itemValue, itemIndex) => setMeri(itemValue)}
+					>
+						<Picker.Item label="am" value="am" />
+						<Picker.Item label="pm" value="pm" />
+				</Picker>
 			</View>
 		</View>
 	);
