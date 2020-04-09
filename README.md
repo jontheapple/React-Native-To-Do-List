@@ -9,19 +9,4 @@ Finally, run
 ```
 npm install
 ```
-in your React project directory. You can now run the app the same way you ran the default React app.
-
-## Backend Installation Instructions
-Begin by running
-```
-npm init
-```
-in a directory of your choosing to initialize. Copy everything from the NodeAPI directory into your directory, replacing anything if necessary. Run
-```
-npm install
-```
-to install dependencies, and then run
-```
-node index.js
-```
-to start the server.
+in your React project directory. You can now run the app the same way you ran the default React app. Note that you may get an error the first time you try to run the app. I find that on a fresh install, I am unable to run the app until the second try.
