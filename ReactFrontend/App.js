@@ -6,9 +6,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import styles from './styles.js';
 
-var today = new Date();
+let today = new Date();
 
-var tasks = [
+let tasks = [
 	{
 		task: 'Throttle flowers',
 		hour: 8,
@@ -26,21 +26,10 @@ var tasks = [
 	}
 ]
 
-fetch("10.0.2.2:3000")
-	.then((response) => response.json())
-	.then((json) => console.log(json))
-	.catch((error) => {
-		console.log(error);
-	});
-
-
-
-var taskList = [];
-
 //Takes the current date and puts it in a string format to be displayed at top of app
 function formattedDate() {
-	var dayString;
-	var monthString;
+	let dayString;
+	let monthString;
 	switch (today.getDay()){
 		case 0:
 			dayString = "Sunday";
@@ -208,8 +197,8 @@ function sortTasks(){
 
 //This function takes an hour (0-23) and a minute (0-59), and returns a string in XX:XX format, ending with "am" or "pm"
 function toDigitalTime(hour, minute){
-	var meri = "";
-	var extraZero = "";
+	let meri = "";
+	let extraZero = "";
 	if (hour >= 12){
 		hour -= 12;
 		meri = "pm"
@@ -222,16 +211,13 @@ function toDigitalTime(hour, minute){
 }
 
 function addTask(task, hour, minute){
-	var newTask = {
+	let newTask = {
 		task: task,
 		hour: hour,
 		minute: minute
 	}
 	tasks.push(newTask);
 	sortTasks();
-	for (var i = 0; i < taskList.length; i++){
-		taskList[i]
-	}
 	return tasks;
 }
 
@@ -253,12 +239,6 @@ function HomeScreen({navigation}) {
 				</View>
 				{
 					tasks.map((currentTask, i) => {
-						// if (taskList.length <= i){
-						// 	taskList[i] = new ListItem();
-						// 	return ()
-						// } else {
-						// 	taskList[i].updateStuff(currentTask);
-						// }
 						return(<ListItem task={currentTask}/>);
 					})
 				}
