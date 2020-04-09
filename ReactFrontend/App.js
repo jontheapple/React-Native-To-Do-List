@@ -98,55 +98,51 @@ function formattedDate() {
 
 //React Component for an individual item on the Todo list
 class ListItem extends React.Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			pressed: false,
-			task: this.props.task.task,
-			hour: this.props.task.hour,
-			minute: this.props.task.minute
-		}
-	}
+	// constructor(props){
+	// 	super(props);
+	// 	this.state = {
+	// 		pressed: false,
+	// 		task: this.props.task.task,
+	// 		hour: this.props.task.hour,
+	// 		minute: this.props.task.minute
+	// 	}
+	// }
 
-	updateStuff(task){
-		this.setState({
-			task: task.task,
-			hour: task.hour,
-			minute: task.minute
-		});
-	}
-
-	doForceUpdate(){
-		this.forceUpdate();
-	}
+	// updateStuff(task){
+	// 	this.setState({
+	// 		task: task.task,
+	// 		hour: task.hour,
+	// 		minute: task.minute
+	// 	});
+	// }
 
 	//This function is called whenever the item is tapped
-	swapState(){
-		this.setState({pressed: !this.state.pressed});
-		return;
-	}
+	// swapState(){
+	// 	this.setState({pressed: !this.state.pressed});
+	// 	return;
+	// }
 
 	render(){
 		//Slightly different behavior depending on if the item is "crossed out"
-		if (this.state.pressed){
+		if (this.props.pressed){
 			return (
 				<View style={{
 						flexDirection: "row",
 						marginBottom: 10
 					}}>
-					<TouchableOpacity style={styles.buttonDone} onPress={() => this.swapState()}/>
+					<TouchableOpacity style={styles.buttonDone} onPress={() => console.log("pressed")}/>
 					<View
 						style={styles.list}
 						>
 						<Text
-							onPress={() => this.swapState()}
+							onPress={() => console.log("pressed")}
 							style={styles.itemTextDone}>
-							{this.state.task}
+							{this.props.task}
 						</Text>
 						<Text
-							onPress={() => this.swapState()}
+							onPress={() => console.log("pressed")}
 							style={styles.itemTimeDone}>
-							{toDigitalTime(this.state.hour, this.state.minute)}
+							{toDigitalTime(this.props.hour, this.props.minute)}
 						</Text>
 					</View>
 				</View>
@@ -157,19 +153,19 @@ class ListItem extends React.Component {
 						flexDirection: "row",
 						marginBottom: 10
 					}}>
-					<TouchableOpacity style={styles.button} onPress={() => this.swapState()}/>
+					<TouchableOpacity style={styles.button} onPress={() => console.log("pressed")}/>
 					<View
 						style={styles.list}
 						>
 						<Text
-							onPress={() => this.swapState()}
+							onPress={() => console.log("pressed")}
 							style={styles.itemText}>
-							{this.state.task}
+							{this.props.task}
 						</Text>
 						<Text
-							onPress={() => this.swapState()}
+							onPress={() => console.log("pressed")}
 							style={styles.itemTime}>
-							{toDigitalTime(this.state.hour, this.state.minute)}
+							{toDigitalTime(this.props.hour, this.props.minute)}
 						</Text>
 					</View>
 				</View>
@@ -239,7 +235,7 @@ function HomeScreen({navigation}) {
 				</View>
 				{
 					tasks.map((currentTask, i) => {
-						return(<ListItem task={currentTask}/>);
+						return(<ListItem task={currentTask.task} hour={currentTask.hour} minute={currentTask.minute} />);
 					})
 				}
 			</View>
