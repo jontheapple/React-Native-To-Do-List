@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require("fs");
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT;
+const IP = process.env.IP;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 const router = express.Router();
@@ -24,6 +25,6 @@ router.get("/", (req, res) => {
 
 app.use(router);
 
-app.listen(PORT, () => {
+app.listen(PORT, IP , () => {
 	console.log("Listening on port " + PORT);
 });
