@@ -1,7 +1,8 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Text, TextInput, View, ScrollView, TouchableOpacity, Image, Picker } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native'
+import { Text, TextInput, View, ScrollView, TouchableOpacity, Image, Button } from 'react-native';
+import {Picker} from "@react-native-community/picker";
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import styles from './styles.js';
@@ -311,6 +312,16 @@ function AddTaskScreen({navigation}) {
 						<Picker.Item label="am" value="am" />
 						<Picker.Item label="pm" value="pm" />
 				</Picker>
+				<Button
+					onPress= {() => {
+						let returnHour = hour;
+						returnHour += (meri === "am") ? 0 : 12;
+						addTask(text, returnHour, minute);
+						navigation.navigate("Home", {added: true});
+					}}
+					title="Add Task"
+					>
+				</Button>
 			</View>
 		</View>
 	);
