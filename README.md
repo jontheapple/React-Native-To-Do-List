@@ -13,3 +13,10 @@ Finally, run
 npm install
 ```
 in your React project directory. You can now run the app the same way you ran the default React app. Note that you may get an error the first time you try to run the app. I find that on a fresh install, I am unable to run the app until the second try. If you do run into errors, just give it a couple more attempts.
+
+## Features Implemented
+Tap the "Plus Button" to be taken to the "add new task" screen.
+
+Tap anywhere on a task to complete it (cross it out).
+
+Swipe a task to the right to delete it.
