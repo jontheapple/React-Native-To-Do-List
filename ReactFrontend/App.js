@@ -10,23 +10,7 @@ import styles from './styles.js';
 
 let today = new Date();
 
-let tasks = [
-	{
-		task: 'Throttle flowers',
-		hour: 8,
-		minute: 0
-	},
-	{
-		task: 'Do dishes',
-		hour: 19,
-		minute: 30
-	},
-	{
-		task: "Attack computer",
-		hour: 14,
-		minute: 45
-	}
-]
+let tasks = [];
 
 //Takes the current date and puts it in a string format to be displayed at top of app
 function formattedDate() {
@@ -118,6 +102,9 @@ class ListItem extends React.Component {
 	onSwipeRight(){
 		this.setState(() => {
 			return {deleted: true}
+		});
+		tasks = tasks.filter((value, i, arr) => {
+			!(value.key === this.props.key);
 		});
 	}
 
@@ -222,31 +209,73 @@ function addTask(task, hour, minute){
 	return tasks;
 }
 
-function HomeScreen({navigation}) {
-	const [items, setItems] = React.useState(tasks.length);
-	return(
-		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
-			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
-				<View style={styles.topBar}>
-					<Text style={styles.dateDisplay}>
-						{formattedDate()}
-					</Text>
-					<TouchableOpacity onPress={() => {
-							navigation.navigate("Add");
-							setItems(items + 1);
-						}}>
-						<Image style={{height: 80, width: 80}} source={require("./AddButton.png")}></Image>
-					</TouchableOpacity>
+class HomeScreen extends React.Component{
+	constructor(props){
+		super(props);
+		this.state = {
+			arbitraryValue: 0
+		}
+	}
+
+	componentDidMount() {
+		fetch("https://salty-chamber-09551.herokuapp.com/")
+			.then(res => res.json())
+			.then(json => tasks = json)
+			.then(() => this.setState({arbitraryValue: this.state.arbitraryValue + 1}));
+	}
+
+	render(){
+		const {navigation} = this.props;
+		return(
+			<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
+				<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
+					<View style={styles.topBar}>
+						<Text style={styles.dateDisplay}>
+							{formattedDate()}
+						</Text>
+						<TouchableOpacity onPress={() => {
+								navigation.navigate("Add");
+								this.setState({arbitraryValue: this.state.arbitraryValue + 1});
+							}}>
+							<Image style={{height: 80, width: 80}} source={require("./AddButton.png")}></Image>
+						</TouchableOpacity>
+					</View>
+					{
+						tasks.map((currentTask, i) => {
+							return(<ListItem task={currentTask.task} hour={currentTask.hour} minute={currentTask.minute} key={currentTask.id}/>);
+						})
+					}
 				</View>
-				{
-					tasks.map((currentTask, i) => {
-						return(<ListItem task={currentTask.task} hour={currentTask.hour} minute={currentTask.minute} />);
-					})
-				}
-			</View>
-		</ScrollView>
-	);
+			</ScrollView>
+		);
+	}
 }
+
+// function HomeScreen({navigation}) {
+// 	const [items, setItems] = React.useState(tasks.length);
+// 	return(
+// 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
+// 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
+// 				<View style={styles.topBar}>
+// 					<Text style={styles.dateDisplay}>
+// 						{formattedDate()}
+// 					</Text>
+// 					<TouchableOpacity onPress={() => {
+// 							navigation.navigate("Add");
+// 							setItems(items + 1);
+// 						}}>
+// 						<Image style={{height: 80, width: 80}} source={require("./AddButton.png")}></Image>
+// 					</TouchableOpacity>
+// 				</View>
+// 				{
+// 					tasks.map((currentTask, i) => {
+// 						return(<ListItem task={currentTask.task} hour={currentTask.hour} minute={currentTask.minute} />);
+// 					})
+// 				}
+// 			</View>
+// 		</ScrollView>
+// 	);
+// }
 
 function AddTaskScreen({navigation}) {
 	const [text, setText] = React.useState();
@@ -254,16 +283,6 @@ function AddTaskScreen({navigation}) {
 	const [minute, setMinute] = React.useState(0);
 	const [meri, setMeri] = React.useState("am");
 	return (
-		// <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-		// 	<Text>Details Screen</Text>
-		// 	<Button
-		// 		title="Go to Details...again..."
-		// 		onPress={() => navigation.push('Details')}
-		// 	/>
-		// 	<Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
-		// 	<Button title="Go back" onPress={() => navigation.goBack()} />
-		// 	<Button title="Go to first screen of stack" onPress={() => navigation.popToTop()} />
-		// </View>
 		<View style={{flex: 1, backgroundColor: "#5f75e2"}}>
 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
 				<Text style={styles.dateDisplay}>
