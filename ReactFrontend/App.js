@@ -4,6 +4,7 @@ import { Text, TextInput, View, ScrollView, TouchableOpacity, Image, Button } fr
 import {Picker} from "@react-native-community/picker";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 import styles from './styles.js';
 
@@ -329,7 +330,7 @@ function AddTaskScreen({navigation}) {
 
 const Stack = createStackNavigator();
 
-function TestApp() {
+function App() {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator initialRouteName="Home">
@@ -344,4 +345,4 @@ function TestApp() {
 	);
 }
 
-export default TestApp;
+export default App;
