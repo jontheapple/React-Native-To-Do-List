@@ -103,17 +103,10 @@ class ListItem extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			pressed: false
+			pressed: false,
+			deleted: false
 		}
 	}
-
-	// updateStuff(task){
-	// 	this.setState({
-	// 		task: task.task,
-	// 		hour: task.hour,
-	// 		minute: task.minute
-	// 	});
-	// }
 
 	//This function is called whenever the item is tapped
 	swapState(){
@@ -122,53 +115,65 @@ class ListItem extends React.Component {
 		});
 	}
 
+	onSwipeRight(){
+		this.setState(() => {
+			return {deleted: true}
+		});
+	}
+
 	render(){
+		if (this.state.deleted) return null;
+
 		//Slightly different behavior depending on if the item is "crossed out"
 		if (this.state.pressed){
 			return (
-				<View style={{
+				<GestureRecognizer onSwipeRight={() => this.onSwipeRight()}>
+					<View style={{
 						flexDirection: "row",
 						marginBottom: 10
-					}}>
-					<TouchableOpacity style={styles.buttonDone} onPress={() => this.swapState()}/>
-					<View
-						style={styles.list}
-						>
-						<Text
-							onPress={() => this.swapState()}
-							style={styles.itemTextDone}>
-							{this.props.task}
-						</Text>
-						<Text
-							onPress={() => this.swapState()}
-							style={styles.itemTimeDone}>
-							{toDigitalTime(this.props.hour, this.props.minute)}
-						</Text>
+						}}>
+						<TouchableOpacity style={styles.buttonDone} onPress={() => this.swapState()}/>
+						<View
+							style={styles.list}
+							>
+							<Text
+								onPress={() => this.swapState()}
+								style={styles.itemTextDone}>
+								{this.props.task}
+							</Text>
+							<Text
+								onPress={() => this.swapState()}
+								style={styles.itemTimeDone}>
+								{toDigitalTime(this.props.hour, this.props.minute)}
+							</Text>
+						</View>
 					</View>
-				</View>
+				</GestureRecognizer>
 			);
 		} else{
 			return (
-				<View style={{
+				<GestureRecognizer onSwipeRight={() => this.onSwipeRight()}>
+					<View style={{
 						flexDirection: "row",
 						marginBottom: 10
-					}}>
-					<TouchableOpacity style={styles.button} onPress={() => this.swapState()}/>
-					<View
-						style={styles.list}
-						>
-						<Text
-							onPress={() => this.swapState()}
-							style={styles.itemText}>
-							{this.props.task}
-						</Text>
-						<Text
-							onPress={() => this.swapState()}
-							style={styles.itemTime}>
-							{toDigitalTime(this.props.hour, this.props.minute)}
-						</Text>
+						}}>
+						<TouchableOpacity style={styles.button} onPress={() => this.swapState()}/>
+						<View
+							style={styles.list}
+							>
+							<Text
+								onPress={() => this.swapState()}
+								style={styles.itemText}>
+								{this.props.task}
+							</Text>
+							<Text
+								onPress={() => this.swapState()}
+								style={styles.itemTime}>
+								{toDigitalTime(this.props.hour, this.props.minute)}
+							</Text>
+						</View>
 					</View>
-				</View>
+				</GestureRecognizer>
 			);
 		}
 	}
