@@ -19,7 +19,7 @@ Tap the "Plus Button" to be taken to the "add new task" screen.
 
 Tap anywhere on a task to complete it (cross it out).
 
-Swipe a task to the right to delete it.
+Swipe a task to delete it. For a slightly better UI experience, I chose to make an alert box pop up when the task is swiped, confirming if the user wants to delete it.
 
 ## Backend Data Structuring
 The API responds with a JSON object with 3 entries. Each entry is an object that holds the text of a task, the time that it needs to be completed, and a unique id. The "time" is another object that contains an hour value and a minute value. I decided to structure it this way because the text and the id are the "main data" of the entry. The time is another object because of the fact that it contains two values, and each of those values do not mean anything without the other. Therefore, it made sense to group them together.

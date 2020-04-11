@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Text, TextInput, View, ScrollView, TouchableOpacity, Image, Button } from 'react-native';
+import { Text, TextInput, View, ScrollView, TouchableOpacity, Image, Button, Alert } from 'react-native';
 import {Picker} from "@react-native-community/picker";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -98,7 +98,14 @@ class ListItem extends React.Component {
 	}
 
 	onSwipeRight(){
-		this.props.deleteTask(this.props.id);
+		Alert.alert(
+			"Delete Task",
+			"Are you sure you want to delete " + this.props.task + "?",
+			[
+				{text: "Delete", onPress: () => this.props.deleteTask(this.props.id), style: "destructive"},
+				{text: "Cancel", onPress: () => {}}
+			]
+		);
 	}
 
 	render(){
@@ -107,7 +114,7 @@ class ListItem extends React.Component {
 		//Slightly different behavior depending on if the item is "crossed out"
 		if (this.state.pressed){
 			return (
-				<GestureRecognizer onSwipeRight={() => this.onSwipeRight()}>
+				<GestureRecognizer onSwipeRight={() => this.onSwipeRight()} onSwipeLeft={() => this.onSwipeRight()}>
 					<View style={{
 						flexDirection: "row",
 						marginBottom: 10
@@ -132,7 +139,7 @@ class ListItem extends React.Component {
 			);
 		} else{
 			return (
-				<GestureRecognizer onSwipeRight={() => this.onSwipeRight()}>
+				<GestureRecognizer onSwipeRight={() => this.onSwipeRight()} onSwipeLeft={() => this.onSwipeRight()}>
 					<View style={{
 						flexDirection: "row",
 						marginBottom: 10
