@@ -10,8 +10,6 @@ import styles from './styles.js';
 
 let today = new Date();
 
-let tasks = [];
-
 //Takes the current date and puts it in a string format to be displayed at top of app
 function formattedDate() {
 	let dayString;
@@ -100,12 +98,7 @@ class ListItem extends React.Component {
 	}
 
 	onSwipeRight(){
-		this.setState(() => {
-			return {deleted: true}
-		});
-		tasks = tasks.filter((value, i, arr) => {
-			!(value.key === this.props.key);
-		});
+		this.props.deleteTask(this.props.id);
 	}
 
 	render(){
@@ -166,23 +159,6 @@ class ListItem extends React.Component {
 	}
 }
 
-//Sort tasks in order of which one needs to be completed first
-function sortTasks(){
-	tasks.sort((firstE, secondE) => {
-		if (firstE.hour > secondE.hour){
-			return 1;
-		} else if (secondE.hour > firstE.hour){
-			return -1;
-		} else{
-			if (firstE.minute > secondE.minute){
-				return 1;
-			} else if (secondE.minute > firstE.minute){
-				return -1;
-			} else return 0;
-		}
-	});
-}
-
 //This function takes an hour (0-23) and a minute (0-59), and returns a string in XX:XX format, ending with "am" or "pm"
 function toDigitalTime(hour, minute){
 	let meri = "";
@@ -198,30 +174,69 @@ function toDigitalTime(hour, minute){
 	return (hour + ":" + extraZero + minute + meri);
 }
 
-function addTask(task, hour, minute){
-	let newTask = {
-		task: task,
-		hour: hour,
-		minute: minute
-	}
-	tasks.push(newTask);
-	sortTasks();
-	return tasks;
-}
-
 class HomeScreen extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			arbitraryValue: 0
+			arbitraryValue: 0,
+			tasks: [],
+			nextId: 0
 		}
+	}
+
+	//Sort tasks in order of which one needs to be completed first
+	sortTasks(tasks){
+		tasks.sort((firstE, secondE) => {
+			if (firstE.hour > secondE.hour){
+				return 1;
+			} else if (secondE.hour > firstE.hour){
+				return -1;
+			} else{
+				if (firstE.minute > secondE.minute){
+					return 1;
+				} else if (secondE.minute > firstE.minute){
+					return -1;
+				} else return 0;
+			}
+		});
+		return tasks;
+	}
+
+	//Add new task to the to do list
+	addTask(task, hour, minute){
+		let newTasks = this.state.tasks;
+		let newTask = {
+			task: task,
+			hour: hour,
+			minute: minute,
+			id: this.state.nextId
+		}
+		newTasks.push(newTask);
+		newTasks = this.sortTasks(newTasks);
+		this.setState({tasks: newTasks, nextId: this.state.nextId + 1});
+	}
+
+	deleteTask(id){
+		let newTasks = this.state.tasks;
+		newTasks = newTasks.filter((value, i, arr) => {
+			return !(value.id === id);
+		});
+		this.setState({tasks: newTasks});
+	}
+
+	//debug function
+	printTasks(){
+		console.log("printing tasks");
+		this.state.tasks.map((currentTask, i) => {
+			console.log("The current task is " + currentTask.task);
+			console.log("Its id is " + currentTask.id);
+		});
 	}
 
 	componentDidMount() {
 		fetch("https://salty-chamber-09551.herokuapp.com/")
 			.then(res => res.json())
-			.then(json => tasks = json)
-			.then(() => this.setState({arbitraryValue: this.state.arbitraryValue + 1}));
+			.then(json => this.setState({tasks: json, nextId: json.length}));
 	}
 
 	render(){
@@ -234,15 +249,15 @@ class HomeScreen extends React.Component{
 							{formattedDate()}
 						</Text>
 						<TouchableOpacity onPress={() => {
-								navigation.navigate("Add");
+								navigation.navigate("Add", {addTask: (task, hour, minute) => this.addTask(task, hour, minute)});
 								this.setState({arbitraryValue: this.state.arbitraryValue + 1});
 							}}>
 							<Image style={{height: 80, width: 80}} source={require("./AddButton.png")}></Image>
 						</TouchableOpacity>
 					</View>
 					{
-						tasks.map((currentTask, i) => {
-							return(<ListItem task={currentTask.task} hour={currentTask.hour} minute={currentTask.minute} key={currentTask.id}/>);
+						this.state.tasks.map((currentTask, i) => {
+							return(<ListItem task={currentTask.task} hour={currentTask.hour} minute={currentTask.minute} id={currentTask.id} deleteTask={(id) => this.deleteTask(id)}/>);
 						})
 					}
 				</View>
@@ -251,33 +266,7 @@ class HomeScreen extends React.Component{
 	}
 }
 
-// function HomeScreen({navigation}) {
-// 	const [items, setItems] = React.useState(tasks.length);
-// 	return(
-// 		<ScrollView style={{flex: 1, backgroundColor: "#5f75e2"}}>
-// 			<View style={{margin: 10, padding: 10, backgroundColor: "white", borderRadius: 10}}>
-// 				<View style={styles.topBar}>
-// 					<Text style={styles.dateDisplay}>
-// 						{formattedDate()}
-// 					</Text>
-// 					<TouchableOpacity onPress={() => {
-// 							navigation.navigate("Add");
-// 							setItems(items + 1);
-// 						}}>
-// 						<Image style={{height: 80, width: 80}} source={require("./AddButton.png")}></Image>
-// 					</TouchableOpacity>
-// 				</View>
-// 				{
-// 					tasks.map((currentTask, i) => {
-// 						return(<ListItem task={currentTask.task} hour={currentTask.hour} minute={currentTask.minute} />);
-// 					})
-// 				}
-// 			</View>
-// 		</ScrollView>
-// 	);
-// }
-
-function AddTaskScreen({navigation}) {
+function AddTaskScreen({route, navigation}) {
 	const [text, setText] = React.useState();
 	const [hour, setHour] = React.useState(0);
 	const [minute, setMinute] = React.useState(0);
@@ -341,7 +330,7 @@ function AddTaskScreen({navigation}) {
 					onPress= {() => {
 						let returnHour = hour;
 						returnHour += (meri === "am") ? 0 : 12;
-						addTask(text, returnHour, minute);
+						route.params.addTask(text, returnHour, minute);
 						navigation.navigate("Home", {added: true});
 					}}
 					title="Add Task"
