@@ -187,14 +187,14 @@ class HomeScreen extends React.Component{
 	//Sort tasks in order of which one needs to be completed first
 	sortTasks(tasks){
 		tasks.sort((firstE, secondE) => {
-			if (firstE.hour > secondE.hour){
+			if (firstE.time.hour > secondE.time.hour){
 				return 1;
-			} else if (secondE.hour > firstE.hour){
+			} else if (secondE.time.hour > firstE.time.hour){
 				return -1;
 			} else{
-				if (firstE.minute > secondE.minute){
+				if (firstE.time.minute > secondE.time.minute){
 					return 1;
-				} else if (secondE.minute > firstE.minute){
+				} else if (secondE.time.minute > firstE.time.minute){
 					return -1;
 				} else return 0;
 			}
@@ -207,8 +207,10 @@ class HomeScreen extends React.Component{
 		let newTasks = this.state.tasks;
 		let newTask = {
 			task: task,
-			hour: hour,
-			minute: minute,
+			time:{
+				hour: hour,
+				minute: minute
+			},
 			id: this.state.nextId
 		}
 		newTasks.push(newTask);
@@ -257,7 +259,7 @@ class HomeScreen extends React.Component{
 					</View>
 					{
 						this.state.tasks.map((currentTask, i) => {
-							return(<ListItem task={currentTask.task} hour={currentTask.hour} minute={currentTask.minute} id={currentTask.id} deleteTask={(id) => this.deleteTask(id)}/>);
+							return(<ListItem task={currentTask.task} hour={currentTask.time.hour} minute={currentTask.time.minute} id={currentTask.id} deleteTask={(id) => this.deleteTask(id)}/>);
 						})
 					}
 				</View>
